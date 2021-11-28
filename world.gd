@@ -1,25 +1,57 @@
 extends Node2D
 
+var mat
+
+var season = 1
+var place = 2
+
 func _ready():
-	# var image_left = Image.new()
-	# image_left.load('res://2021_002_033_001_l.jpg')
-
-	# var dimension_left = image_left.get_used_rect()
-	# var size_left = dimension_left.size
-	# var mask_left = generate_img(size_left.x, size_left.y, Color.red)
-
-	# var image = Image.new()
-	# image.create(size_left.x, size_left.y, false, Image.FORMAT_RGB8)
-	# image.blit_rect_mask(image_left, mask_left, dimension_left, Vector2(0, 0))
-	# image.blit_rect(image_left, dimension_left, Vector2(0, 0))
-
-	# var texture = ImageTexture.new()
-	# texture.create_from_image(image)
-	# $sprite.set_texture(texture)
+	mat = $sprite.get_material()
+	load_panorama()
 	pass
-	
-func generate_img(x, y, color: Color):
+
+var speed = Vector2(48 / 3.4, 0) * 3
+
+func _input(event):
+	if event.is_action("ui_left"):
+		position += speed
+	if event.is_action("ui_right"):
+		position -= speed
+	if event.is_action_pressed("ui_page_up"):
+		season += 1
+		load_panorama()
+	if event.is_action_pressed("ui_page_down"):
+		season -=1
+		load_panorama()
+	if event.is_action_pressed("ui_up"):
+		place += 1
+		load_panorama()
+	if event.is_action_pressed("ui_down"):
+		place -=1
+		load_panorama()
+	pass
+
+func load_panorama():
+	var season_string = "%03d" % season
+	var place_string = "%03d" % place
+
+	# ~/.local/share/godot/app_userdata/village_test/
+	var base = "user://001_pictures/2021_" + season_string + "_" + place_string + "_"
+	var left_picture = base + "l.jpg"
+	var right_picture = base + "r.jpg"
+	print("Loading: " + left_picture)
+	print("Loading: " + right_picture)
+	mat.set_shader_param("left_camera", load_jpg(left_picture))
+	mat.set_shader_param("right_camera", load_jpg(right_picture))
+	pass
+
+func load_jpg(file):
+	var jpg_file = File.new()
+	jpg_file.open(file, File.READ)
+	var bytes = jpg_file.get_buffer(jpg_file.get_len())
 	var img = Image.new()
-	img.create(x, y, false, Image.FORMAT_RGB8)
-	img.fill(color)
-	return img
+	var data = img.load_jpg_from_buffer(bytes)
+	var imgtex = ImageTexture.new()
+	imgtex.create_from_image(img)
+	jpg_file.close()
+	return imgtex
