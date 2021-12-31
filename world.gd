@@ -5,8 +5,11 @@ var mat
 var season = 1
 var place = 2
 
+var anaglyph = true
+
 func _ready():
 	mat = $sprite.get_material()
+	load_anaglyph()
 	load_panorama()
 	pass
 
@@ -29,6 +32,13 @@ func _input(event):
 	if event.is_action_pressed("ui_down"):
 		place -=1
 		load_panorama()
+	if event.is_action_pressed("ui_home"):
+		anaglyph = !anaglyph
+		load_anaglyph()
+	pass
+
+func load_anaglyph():
+	mat.set_shader_param("anaglyph", anaglyph)
 	pass
 
 func load_panorama():

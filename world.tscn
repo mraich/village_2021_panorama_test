@@ -10,20 +10,28 @@ code = "shader_type canvas_item;
 
 uniform sampler2D left_camera;
 uniform sampler2D right_camera;
+uniform bool anaglyph = true;
 
 void fragment() {
-    vec4 left = texture(left_camera, UV) * vec4(1, 0, 0, 1);
-	// Ghosting is leaking the green color from the right to the left.
-	// So we completely remove the green color from the right as well.
-    // vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
-	vec4 right = texture(right_camera, UV) * vec4(0, 0, 1, 1);
+	if (anaglyph) {
+		vec4 left = texture(left_camera, UV) * vec4(1, 0, 0, 1);
+		// Ghosting is leaking the green color from the right to the left.
+		// So we completely remove the green color from the right as well.
+		// vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
+		vec4 right = texture(right_camera, UV) * vec4(0, 0, 1, 1);
 
-    COLOR.rgb = left.rgb + right.rgb;
+		COLOR.rgb = left.rgb + right.rgb;
+	} else {
+		vec4 left = texture(left_camera, UV) * vec4(1, 1, 1, 1);
+
+		COLOR.rgb = left.rgb;
+	}
 }
 "
 
 [sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 2 )
+shader_param/anaglyph = true
 script = SubResource( 1 )
 
 [node name="world" type="Node2D"]
