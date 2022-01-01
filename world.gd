@@ -6,6 +6,8 @@ var season = 1
 var place = 2
 
 var anaglyph = true
+var brightness = 1
+var contrast = 1
 
 func _ready():
 	mat = $sprite.get_material()
@@ -35,6 +37,28 @@ func _input(event):
 	if event.is_action_pressed("ui_home"):
 		anaglyph = !anaglyph
 		load_anaglyph()
+	if event.is_action_pressed("add_brightness"):
+		brightness += 0.1
+		load_brightness()
+	if event.is_action_pressed("sub_brightness"):
+		brightness -= 0.1
+		load_brightness()
+	if event.is_action_pressed("add_contrast"):
+		contrast += 0.1
+		load_contrast()
+	if event.is_action_pressed("sub_contrast"):
+		contrast -= 0.1
+		load_contrast()
+	pass
+
+func load_brightness():
+	print("brightness: ", brightness)
+	mat.set_shader_param("brightness", brightness)
+	pass
+
+func load_contrast():
+	print("contrast: ", contrast)
+	mat.set_shader_param("contrast", contrast)
 	pass
 
 func load_anaglyph():
