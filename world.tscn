@@ -12,6 +12,9 @@ uniform sampler2D left_camera;
 uniform sampler2D right_camera;
 uniform bool anaglyph = true;
 
+uniform float contrast = 1;
+uniform float brightness = 1;
+
 void fragment() {
 	if (anaglyph) {
 		vec4 left = texture(left_camera, UV) * vec4(1, 0, 0, 1);
@@ -21,7 +24,15 @@ void fragment() {
 		// In this case we use the green color too.
 		vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
 
-		COLOR.rgb = left.rgb + right.rgb;
+		vec3 pixel = left.rgb + right.rgb;
+
+		// According to this article it's possible to remove the
+		// ghost images by changing the contrast and brightness.
+		// http://stereo.jpn.org/eng/stphmkr/help/stereo_14.htm
+		pixel.rgb = mix(vec3(0.0), pixel.rgb, brightness);
+		pixel.rgb = mix(vec3(0.5), pixel.rgb, contrast);
+
+		COLOR.rgb = pixel;
 	} else {
 		vec4 left = texture(left_camera, UV) * vec4(1, 1, 1, 1);
 
@@ -33,6 +44,8 @@ void fragment() {
 [sub_resource type="ShaderMaterial" id=3]
 shader = SubResource( 2 )
 shader_param/anaglyph = true
+shader_param/contrast = 1.0
+shader_param/brightness = 1.0
 script = SubResource( 1 )
 
 [node name="world" type="Node2D"]
