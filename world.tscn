@@ -22,6 +22,8 @@ void fragment() {
 		// So we completely remove the green color from the right as well.
 		// vec4 right = texture(right_camera, UV) * vec4(0, 0, 1, 1);
 		// In this case we use the green color too.
+		// vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
+		// Let's try this instead.
 		vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
 
 		vec3 pixel = left.rgb + right.rgb;

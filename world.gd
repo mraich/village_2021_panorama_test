@@ -2,8 +2,8 @@ extends Node2D
 
 var mat
 
-var season = 1
-var place = 2
+var season = 4
+var place = 29
 
 var anaglyph = true
 var brightness = 1
@@ -88,4 +88,6 @@ func load_jpg(file):
 	var imgtex = ImageTexture.new()
 	imgtex.create_from_image(img)
 	jpg_file.close()
+
+	imgtex.set_flags(Texture.FLAG_REPEAT)
 	return imgtex
