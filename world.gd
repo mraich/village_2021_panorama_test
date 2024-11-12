@@ -1,7 +1,5 @@
 extends Node2D
 
-var mat
-
 var season = 4
 var place = 29
 
@@ -9,6 +7,8 @@ var anaglyph = true
 var brightness = 1
 var contrast = 1
 var speed = 0
+
+var mat
 
 func _ready():
 	mat = $sprite.get_material()
