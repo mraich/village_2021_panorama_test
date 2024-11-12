@@ -8,6 +8,7 @@ var place = 29
 var anaglyph = true
 var brightness = 1
 var contrast = 1
+var speed = 0
 
 func _ready():
 	mat = $sprite.get_material()
@@ -15,13 +16,13 @@ func _ready():
 	load_panorama()
 	pass
 
-var speed = Vector2(48 / 3.4, 0) * 3
-
 func _input(event):
 	if event.is_action("ui_left"):
-		position += speed
+		speed -= 1
+		mat.set_shader_param("speed", speed)
 	if event.is_action("ui_right"):
-		position -= speed
+		speed += 1
+		mat.set_shader_param("speed", speed)
 	if event.is_action_pressed("ui_page_up"):
 		season += 1
 		load_panorama()
