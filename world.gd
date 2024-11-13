@@ -8,6 +8,9 @@ var brightness = 1
 var contrast = 1
 var speed = 0
 
+var offsetX = 0
+var offsetY = 0
+
 var mat
 
 func _ready():
@@ -50,6 +53,18 @@ func _input(event):
 	if event.is_action_pressed("sub_contrast"):
 		contrast -= 0.1
 		load_contrast()
+	if event.is_action("ui_left_camera_left"):
+		offsetX += 1
+		mat.set_shader_param("offset_x", offsetX)
+	if event.is_action("ui_left_camera_right"):
+		offsetX -= 1
+		mat.set_shader_param("offset_x", offsetX)
+	if event.is_action("ui_left_camera_up"):
+		offsetY += 1
+		mat.set_shader_param("offset_y", offsetY)
+	if event.is_action("ui_left_camera_down"):
+		offsetY -= 1
+		mat.set_shader_param("offset_y", offsetY)
 	pass
 
 func load_brightness():

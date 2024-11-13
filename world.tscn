@@ -16,19 +16,26 @@ uniform float contrast = 1;
 uniform float brightness = 1;
 uniform float speed = 0f;
 
+uniform float offset_x = 0f;
+uniform float offset_y = 0f;
+
 void fragment() {
-	vec2 newUV = UV;
-	newUV.x += speed * 0.025f;
+	vec2 newUVRight = UV;
+	newUVRight.x += speed * 0.025f;
+
+	vec2 newUVLeft = newUVRight;
+	newUVLeft.x += offset_x * 0.00675f / 4f;
+	newUVLeft.y += offset_y * 0.00675f / 4f;
 
 	if (anaglyph) {
-		vec4 left = texture(left_camera, newUV) * vec4(1, 0, 0, 1);
+		vec4 left = texture(left_camera, newUVLeft) * vec4(1, 0, 0, 1);
 		// Ghosting is leaking the green color from the right to the left.
 		// So we completely remove the green color from the right as well.
 		// vec4 right = texture(right_camera, UV) * vec4(0, 0, 1, 1);
 		// In this case we use the green color too.
 		// vec4 right = texture(right_camera, UV) * vec4(0, 1, 1, 1);
 		// Let's try this instead.
-		vec4 right = texture(right_camera, newUV) * vec4(0, 1, 1, 1);
+		vec4 right = texture(right_camera, newUVRight) * vec4(0, 1, 1, 1);
 
 		vec3 pixel = left.rgb + right.rgb;
 
@@ -40,7 +47,7 @@ void fragment() {
 
 		COLOR.rgb = pixel;
 	} else {
-		vec4 left = texture(left_camera, newUV) * vec4(1, 1, 1, 1);
+		vec4 left = texture(left_camera, newUVLeft) * vec4(1, 1, 1, 1);
 
 		COLOR.rgb = left.rgb;
 	}
@@ -53,6 +60,8 @@ shader_param/anaglyph = true
 shader_param/contrast = 1.0
 shader_param/brightness = 1.0
 shader_param/speed = 0.0
+shader_param/offset_x = 0.0
+shader_param/offset_y = 0.0
 script = SubResource( 1 )
 
 [node name="world" type="Node2D"]
