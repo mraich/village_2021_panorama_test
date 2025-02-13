@@ -14,14 +14,15 @@ uniform bool anaglyph = true;
 
 uniform float contrast = 1;
 uniform float brightness = 1;
-uniform float speed = 0f;
+uniform float angle = 0f;
+uniform float angle_units = 80f;
 
 uniform float offset_x = 0f;
 uniform float offset_y = 0f;
 
 void fragment() {
 	vec2 newUVRight = UV;
-	newUVRight.x += speed * 0.025f;
+	newUVRight.x += angle * (1f / angle_units);
 
 	vec2 newUVLeft = newUVRight;
 	newUVLeft.x += offset_x * 0.00675f / 4f;
@@ -59,7 +60,8 @@ shader = SubResource( 2 )
 shader_param/anaglyph = true
 shader_param/contrast = 1.0
 shader_param/brightness = 1.0
-shader_param/speed = 0.0
+shader_param/angle = 0.0
+shader_param/angle_units = 80.0
 shader_param/offset_x = 0.0
 shader_param/offset_y = 0.0
 script = SubResource( 1 )

@@ -6,7 +6,8 @@ var place = 29
 var anaglyph = true
 var brightness = 1
 var contrast = 1
-var speed = 0
+var angle = 0
+var angle_units = 40
 
 var offsetX = 0
 var offsetY = 0
@@ -15,17 +16,18 @@ var mat
 
 func _ready():
 	mat = $sprite.get_material()
+	mat.set_shader_param("angle_units", angle_units)
 	load_anaglyph()
 	load_panorama()
 	pass
 
 func _input(event):
 	if event.is_action("ui_left"):
-		speed -= 1
-		mat.set_shader_param("speed", speed)
+		angle -= 1
+		mat.set_shader_param("angle", angle)
 	if event.is_action("ui_right"):
-		speed += 1
-		mat.set_shader_param("speed", speed)
+		angle += 1
+		mat.set_shader_param("angle", angle)
 	if event.is_action_pressed("ui_page_up"):
 		season += 1
 		load_panorama()
